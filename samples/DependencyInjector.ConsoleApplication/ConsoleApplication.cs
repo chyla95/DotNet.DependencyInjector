@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace DependencyInjector.ConsoleApplication
+﻿namespace DependencyInjector.ConsoleApplication
 {
 	internal class ConsoleApplication
 	{
@@ -16,10 +14,5 @@ namespace DependencyInjector.ConsoleApplication
 			DateTime time = _clockService.GetTime();
 			Console.WriteLine($"Time: {time}");
 		}
-	}
-
-	internal class ClockService
-	{
-		public DateTime GetTime() => DateTime.UtcNow;
 	}
 }
