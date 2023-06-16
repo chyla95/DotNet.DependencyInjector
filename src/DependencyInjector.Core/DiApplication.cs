@@ -5,13 +5,13 @@ using Microsoft.Extensions.Hosting;
 
 namespace DependencyInjector.Core
 {
-	public sealed class DependencyInjector : IHost
+	public sealed class DiApplication : IHost
 	{
 		private static readonly object _lock = new();
-		private static DependencyInjectorBuilder? _applicationBuilder;
+		private static DiBuilder? _applicationBuilder;
 		private readonly IHost _host;
 
-		public DependencyInjector(IHost host)
+		public DiApplication(IHost host)
 		{
 			_host = host;
 		}
@@ -21,26 +21,26 @@ namespace DependencyInjector.Core
 		public IHostApplicationLifetime Lifetime => _host.Services.GetRequiredService<IHostApplicationLifetime>();
 
 		public Task StartAsync(CancellationToken cancellationToken = default) => _host.StartAsync(cancellationToken);
-		public Task StartAsync(Action<IServiceProvider, IConfiguration> initialize, CancellationToken cancellationToken = default)
+		public async Task StartAsync(Action<IServiceProvider, IConfiguration> initialize, CancellationToken cancellationToken = default)
 		{
+			await _host.StartAsync(cancellationToken);
 			initialize(Services, Configuration);
-			return _host.StartAsync(cancellationToken);
 		}
-		public Task StartAsync<TApp>(Action<TApp> initialize, CancellationToken cancellationToken = default) where TApp : class
+		public async Task StartAsync<TApp>(Action<TApp> initialize, CancellationToken cancellationToken = default) where TApp : class
 		{
 			TApp? app = Services.GetService<TApp>();
 			if (app is null) throw new NullReferenceException(nameof(app));
 
+			await _host.StartAsync(cancellationToken);
 			initialize(app);
-			return _host.StartAsync(cancellationToken);
 		}
-		public Task StartAsync<TApp>(Action<TApp, IServiceProvider, IConfiguration> initialize, CancellationToken cancellationToken = default) where TApp : class
+		public async Task StartAsync<TApp>(Action<TApp, IServiceProvider, IConfiguration> initialize, CancellationToken cancellationToken = default) where TApp : class
 		{
 			TApp? app = Services.GetService<TApp>();
 			if (app is null) throw new NullReferenceException(nameof(app));
 
+			await _host.StartAsync(cancellationToken);
 			initialize(app, Services, Configuration);
-			return _host.StartAsync(cancellationToken);
 		}
 
 		public Task StopAsync(CancellationToken cancellationToken = default)
@@ -50,11 +50,11 @@ namespace DependencyInjector.Core
 		}
 		public void Dispose() => _host.Dispose();
 
-		public static DependencyInjectorBuilder CreateBuilder()
+		public static DiBuilder CreateBuilder()
 		{
 			if (_applicationBuilder is not null) return _applicationBuilder;
 
-			lock (_lock) _applicationBuilder ??= new DependencyInjectorBuilder();
+			lock (_lock) _applicationBuilder ??= new DiBuilder();
 			return _applicationBuilder;
 		}
 	}

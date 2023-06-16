@@ -4,11 +4,11 @@ using Microsoft.Extensions.Hosting;
 
 namespace DependencyInjector.Core.Builder
 {
-	public sealed class DependencyInjectorBuilder
+	public sealed class DiBuilder
 	{
 		private readonly IHostBuilder _hostBuilder;
 
-		public DependencyInjectorBuilder()
+		public DiBuilder()
 		{
 			_hostBuilder = Host.CreateDefaultBuilder();
 
@@ -19,7 +19,7 @@ namespace DependencyInjector.Core.Builder
 		public IConfigurationBuilder Configuration { get; private set; }
 		public IServiceCollection Services { get; private set; }
 
-		public DependencyInjector Build(DependencyInjectorBuilderConfiguration? configuration)
+		public DiApplication Build(DiBuilderConfiguration? configuration)
 		{
 			if(configuration is { EnvironmentName: not null })
 			{
@@ -40,7 +40,7 @@ namespace DependencyInjector.Core.Builder
 			});
 
 			IHost host = _hostBuilder.Build();
-			return new DependencyInjector(host);
+			return new DiApplication(host);
 		}
 	}
 }
