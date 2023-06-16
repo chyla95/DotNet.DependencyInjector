@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace DependencyInjector.Core
 {
-	public sealed class DiApplication : IHost, IDiApplication
+	public sealed class DiApplication : IDiApplication
 	{
 		private static readonly object _lock = new();
 		private static DiBuilder? _applicationBuilder;
@@ -28,16 +28,14 @@ namespace DependencyInjector.Core
 		}
 		public async Task StartAsync<TApp>(Action<TApp> initialize, CancellationToken cancellationToken = default) where TApp : class
 		{
-			TApp? app = Services.GetService<TApp>();
-			if (app is null) throw new NullReferenceException(nameof(app));
+			TApp app = ActivatorUtilities.CreateInstance<TApp>(Services);
 
 			await _host.StartAsync(cancellationToken);
 			initialize(app);
 		}
 		public async Task StartAsync<TApp>(Action<TApp, IServiceProvider, IConfiguration> initialize, CancellationToken cancellationToken = default) where TApp : class
 		{
-			TApp? app = Services.GetService<TApp>();
-			if (app is null) throw new NullReferenceException(nameof(app));
+			TApp app = ActivatorUtilities.CreateInstance<TApp>(Services);
 
 			await _host.StartAsync(cancellationToken);
 			initialize(app, Services, Configuration);
@@ -50,7 +48,7 @@ namespace DependencyInjector.Core
 		}
 		public void Dispose() => _host.Dispose();
 
-		public static DiBuilder CreateBuilder()
+		public static IDiBuilder CreateBuilder()
 		{
 			if (_applicationBuilder is not null) return _applicationBuilder;
 
