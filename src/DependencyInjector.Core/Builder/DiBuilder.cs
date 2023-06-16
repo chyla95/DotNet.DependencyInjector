@@ -19,7 +19,7 @@ namespace DependencyInjector.Core.Builder
 		public IConfigurationBuilder Configuration { get; private set; }
 		public IServiceCollection Services { get; private set; }
 
-		public DiApplication Build(DiBuilderConfiguration? configuration)
+		public IDiApplication Build(DiBuilderConfiguration? configuration)
 		{
 			if (configuration is { EnvironmentName: not null })
 			{
