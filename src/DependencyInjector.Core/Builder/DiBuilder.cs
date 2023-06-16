@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace DependencyInjector.Core.Builder
 {
-	public sealed class DiBuilder
+	public sealed class DiBuilder : IDiBuilder
 	{
 		private readonly IHostBuilder _hostBuilder;
 
@@ -21,10 +21,10 @@ namespace DependencyInjector.Core.Builder
 
 		public DiApplication Build(DiBuilderConfiguration? configuration)
 		{
-			if(configuration is { EnvironmentName: not null })
+			if (configuration is { EnvironmentName: not null })
 			{
 				string? environmentName = Environment.GetEnvironmentVariable(configuration.EnvironmentName);
-				if ( string.IsNullOrWhiteSpace(environmentName)) throw new NullReferenceException(environmentName);
+				if (string.IsNullOrWhiteSpace(environmentName)) throw new NullReferenceException(environmentName);
 				_hostBuilder.UseEnvironment(environmentName);
 			}
 

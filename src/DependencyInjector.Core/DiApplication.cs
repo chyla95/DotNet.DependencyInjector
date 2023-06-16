@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace DependencyInjector.Core
 {
-	public sealed class DiApplication : IHost
+	public sealed class DiApplication : IHost, IDiApplication
 	{
 		private static readonly object _lock = new();
 		private static DiBuilder? _applicationBuilder;
