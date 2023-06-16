@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace DependencyInjector.Core.Builder
 {
-	internal static class DependencyInjectorBuilderInternalExtensions
+	internal static class DiBuilderInternalExtensions
 	{
 		public static IConfigurationBuilder AddDefaultConfiguration(this IConfigurationBuilder configuration, HostBuilderContext hostBuilderContext)
 		{
