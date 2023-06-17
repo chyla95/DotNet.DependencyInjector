@@ -8,6 +8,7 @@ namespace DependencyInjector.Core.Builder
 		IConfigurationBuilder Configuration { get; }
 		IServiceCollection Services { get; }
 
-		IDiApplication Build(DiBuilderConfiguration? configuration);
+		IDiApplication Build();
+		IDiApplication Build(Action<DiBuilderOptions>? configure);
 	}
 }

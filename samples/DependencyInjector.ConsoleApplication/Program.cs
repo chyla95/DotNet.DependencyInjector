@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 IDiBuilder builder = DiApplication.CreateBuilder();
 builder.Services.AddTransient<ClockService>();
 
-IDiApplication app = builder.Build(null);
+IDiApplication app = builder.Build();
 
 // Option I.
 //await app.StartAsync<ConsoleApplication>((consoleApplication, services, configuration) =>

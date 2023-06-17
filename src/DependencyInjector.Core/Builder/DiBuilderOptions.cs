@@ -1,6 +1,6 @@
 ﻿namespace DependencyInjector.Core.Builder
 {
-	public sealed class DiBuilderConfiguration
+	public sealed class DiBuilderOptions
 	{
 		public string? EnvironmentName { get; set; }
 	}

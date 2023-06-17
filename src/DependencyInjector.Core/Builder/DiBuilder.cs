@@ -7,27 +7,24 @@ namespace DependencyInjector.Core.Builder
 	public sealed class DiBuilder : IDiBuilder
 	{
 		private readonly IHostBuilder _hostBuilder;
+		private readonly DiBuilderOptions _diBuilderOptions;
 
 		public DiBuilder()
 		{
 			_hostBuilder = Host.CreateDefaultBuilder();
+			_diBuilderOptions = new DiBuilderOptions();
 
 			Services = new ServiceCollection();
 			Configuration = new ConfigurationBuilder();
 		}
 
-		public IConfigurationBuilder Configuration { get; private set; }
-		public IServiceCollection Services { get; private set; }
+		public IConfigurationBuilder Configuration { get; }
+		public IServiceCollection Services { get; }
 
-		public IDiApplication Build(DiBuilderConfiguration? configuration)
+		public IDiApplication Build() => Build(null);
+		public IDiApplication Build(Action<DiBuilderOptions>? configure)
 		{
-			if (configuration is { EnvironmentName: not null })
-			{
-				string? environmentName = Environment.GetEnvironmentVariable(configuration.EnvironmentName);
-				if (string.IsNullOrWhiteSpace(environmentName)) throw new NullReferenceException(environmentName);
-				_hostBuilder.UseEnvironment(environmentName);
-			}
-
+			// Apply defaults
 			_hostBuilder.ConfigureAppConfiguration((hostBuilderContext, configuration) =>
 			{
 				configuration.AddDefaultConfiguration(hostBuilderContext);
@@ -39,6 +36,13 @@ namespace DependencyInjector.Core.Builder
 				foreach (var service in Services) services.Add(service);
 			});
 
+			// Apply options
+			if (configure is not null) configure(_diBuilderOptions);
+
+			string environmentName = _diBuilderOptions.EnvironmentName ?? Constants.EnvironmentVariableNames.EnvironmentName;
+			_hostBuilder.UseEnvironment(environmentName);
+
+			// Build app
 			IHost host = _hostBuilder.Build();
 			return new DiApplication(host);
 		}
