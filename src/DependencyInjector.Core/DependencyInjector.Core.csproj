@@ -8,7 +8,7 @@
 
 	<PropertyGroup>
 		<PackageId>Chyla.Utilities.DependencyInjector</PackageId>
-		<Version>0.0.1</Version>
+		<Version>0.0.2</Version>
 		<Authors>Chyla</Authors>
 		<RepositoryUrl>https://github.com/chyla95/DotNet.DependencyInjector</RepositoryUrl>
 		<Title>DependencyInjector</Title>
