@@ -39,8 +39,9 @@ namespace DependencyInjector.Core.Builder
 			// Apply options
 			if (configure is not null) configure(_diBuilderOptions);
 
-			string environmentName = _diBuilderOptions.EnvironmentName ?? Constants.EnvironmentVariableNames.EnvironmentName;
-			_hostBuilder.UseEnvironment(environmentName);
+			string? environmentName = Environment.GetEnvironmentVariable(Constants.EnvironmentVariableNames.EnvironmentName);
+			if (_diBuilderOptions.EnvironmentName is not null) environmentName = _diBuilderOptions.EnvironmentName;
+			if(environmentName is not null) _hostBuilder.UseEnvironment(environmentName);
 
 			// Build app
 			IHost host = _hostBuilder.Build();
