@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DependencyInjector.ConsoleApplication": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
